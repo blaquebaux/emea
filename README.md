@@ -18,16 +18,27 @@ julia --project=engine -e 'using Pkg; Pkg.instantiate()'   # one-time engine set
 
 Regional exposure via US-listed ETFs and ADRs (VGK, EZU, EWG, EWU, EIS, EZA and peers) — a macro / regional-rotation sleeve. Caveat: traded through US-listed wrappers, so it inherits US-hours pricing and embedded FX.
 
-## Research plan (Path A — not yet built)
+## Research — first pass done
 
-- Regional trend / rotation — country and region ETFs, vol-targeted.
-- USD / FX overlay — separate local-market return from currency.
-- Cross-region rotation with APAC and LATAM — relative strength across regions.
+Full detail in [`research/README.md`](research/README.md). The scorecard:
 
-Nothing above is implemented or validated. This is the map, not the territory.
+| # | Question | Verdict |
+|---|----------|---------|
+| 1 | Distinct exposure or US beta? | ❌ US beta wearing a flag — 11 ETFs → **1.8 bets**, corr-SPY 0.82; +0.61/+10%/−40% vs SPY +0.88/+15%/−34% |
+| 1 | What does the unhedged FX cost? | ⚠️ real drag — Europe hedged HEDJ beat unhedged EZU by −13%; basket corr to dollar **−0.38** |
+| 2 | Does country / region rotation add alpha? | ❌ no — long-RS +0.61 = EW-hold; long-short **−0.23**; cross-region rotate +0.60 < SPY +0.88 |
+
+**The synthesis:** EMEA is the starkest "US beta wearing a flag" in the family — 11 country ETFs from
+Germany to Turkey collapse to **1.8 effective bets** (corr-SPY 0.82, beta 0.90) and underperform SPY on
+every axis (+0.61/+10%/−40% vs +0.88/+15%/−34%), while adding political tail risk. It is the most
+dollar-sensitive region (corr to UUP −0.38), carrying an uncompensated FX drag (hedged Europe beats
+unhedged), and rotation adds nothing (long-short country momentum is **negative**, −0.23 — Europe's
+countries move together). A null as a standalone sleeve; at best a currency-hedged input to a global
+relative-strength book — where APAC, not EMEA, is the better candidate.
 
 ## Status
-**Scaffold.** Engine wired as a submodule; strategy research not yet conducted.
+**Research: first pass complete — a null (US beta + FX drag, no rotation edge)** (`research/`). No live
+driver. Geography within equities is just more beta; the honest conclusion points back to the spine.
 
 ## The Blaque Baux family
 This repo is one sleeve of the **Blaque Baux** family — a single governed engine steered in
@@ -37,7 +48,7 @@ base/blueprint and holds the [full family roster](https://github.com/Carter-Warr
 ## Layout
 ```
 engine/     the Blaque Baux platform (git submodule -> Carter-Warrens/blaquebaux)
-research/   Path-A strategy sketches (to come)
+research/   two Path-A sketches (regional beta + FX drag, country/region rotation) + scorecard
 live/       governed live drivers (once a sleeve graduates to paper A/B)
 ```
 
